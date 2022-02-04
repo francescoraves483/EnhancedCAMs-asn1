@@ -3,8 +3,6 @@ This repository contains the ASN.1 module for the enhanced version of Cooperativ
 The enhanced version is a proposed addition to the ETSI EN 302 637-2 v1.4.1 (2019-04) standard, which defines the format for CAM messages (version 2), together with the rules for the transmission and reception of the messages themselves (i.e., the so-called Cooperative Awareness Basic Service).
 The Enhanced CAMs are equal to standard CAMs, but for the addition of an extra optional container.
 
-The required [ITS-Container module](https://forge.etsi.org/rep/ITS/asn1/cdd_ts102894_2), from ETSI, is also included here.
-
 This container has been thought to store information about node and channel load, together with a few additional network parameters (such as IP addresses in case an IP stack is available in the sending and/or receiving ITS Station). This information is currently not found in any other ETSI message, to the best of our knowledge, even though it can be important to enable novel Vehicular Networking approaches, such as Vehicle Edge Computing or Vehicular Micro Clouds.
 
 We propose thus a new container, called Channel and Node Status Container, which stores:
@@ -25,6 +23,8 @@ We propose thus a new container, called Channel and Node Status Container, which
 - _(not yet implemented in the ASN.1 module)_ Up to 10 service IP addresses (optional field to store up to 10 extra IP addresses, depending on the user needs)
 
 This repository contains the latest version of the ASN.1 module for the Enhanced CAMs. It has been designed to make it easy for an application to support both standard CAMs (without the possibility of adding the extra container) and enhanced CAMs. Standard CAMs can be generated starting from the "CAM" sequence, while Enhanced CAMs can be generated starting from the "CAMEnhanced" sequence. The additional container is optional even in enhanced CAMs.
+
+The required [ITS-Container module](https://forge.etsi.org/rep/ITS/asn1/cdd_ts102894_2), from ETSI, is also included here.
 
 If you want to use this module in a C/C++ program, you can generate the encoding/decoding C functions with tools like [asn1c](https://github.com/vlm/asn1c).
 
