@@ -30,7 +30,7 @@ If you want to use this module in a C/C++ program, you can generate the encoding
 
 The original ASN.1 module for standard CAMs by ETSI can be found [here](https://forge.etsi.org/rep/ITS/asn1/cam_en302637_2/-/tree/master).
 
-This module is currently being used in the [OCABS](https://github.com/francescoraves483/OCABS) and [AIM](https://github.com/francescoraves483/AIM) projects.
+This module is currently being used in the [OCABS](https://github.com/francescoraves483/OCABS-project) and [AIM](https://github.com/francescoraves483/AIM-AutomotiveIntegratedMap) projects.
 
 # License
 The content of this repository and the files contained are released under the BSD-3-Clause license.

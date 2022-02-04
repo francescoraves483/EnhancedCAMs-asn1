@@ -1,0 +1,180 @@
+CAM-PDU-Descriptions {
+itu-t (0) identified-organization (4) etsi (0) itsDomain (5) wg1 (1) en (302637) cam (2) version (2) 
+}
+
+DEFINITIONS AUTOMATIC TAGS ::=
+
+BEGIN
+
+IMPORTS 
+ItsPduHeader, CauseCode, ReferencePosition, AccelerationControl, Curvature, CurvatureCalculationMode, Heading, LanePosition, EmergencyPriority, EmbarkationStatus, Speed, DriveDirection, LongitudinalAcceleration, LateralAcceleration, VerticalAcceleration, StationType, ExteriorLights, DangerousGoodsBasic, SpecialTransportType, LightBarSirenInUse, VehicleRole, VehicleLength, VehicleWidth, PathHistory, RoadworksSubCauseCode, ClosedLanes, TrafficRule, SpeedLimit, SteeringWheelAngle, PerformanceClass, YawRate, ProtectedCommunicationZone, PtActivation, Latitude, Longitude, ProtectedCommunicationZonesRSU, CenDsrcTollingZone FROM ITS-Container {
+itu-t (0) identified-organization (4) etsi (0) itsDomain (5) wg1 (1) ts (102894) cdd (2) version (2) 
+};
+
+--  Additional ChannelNodeStatusContainer data
+-- MAC address of the device connected to the OBU and providing an additional networking capability (e.g., C-V2X modem, mmWave device)
+AuxilliaryLinkMac ::= OCTET STRING
+-- CPU Load expressed in 0.01%
+CPULoad ::= INTEGER {zeroUsage(0), halfUsage(5000), fullUsage(10000), unavailable(10001)} (0..10001)
+-- GPU Load expressed in 0.01%
+GPULoad ::= INTEGER {zeroUsage(0), halfUsage(5000), fullUsage(10000), unavailable(10001)} (0..10001)
+-- RAM usage expressed in MB (minimum 0, maximum 512000, i.e., 512 GB)
+RAMLoad ::= INTEGER {maximumAllowedValue(512000), unavailable(512001)} (0..512001)
+-- RSSI of the link established through the device connected to the OBU and providing an additional networking capability (e.g., C-V2X modem, mmWave device)
+-- This value refers to the RSSI towards an AP or an eNB/gNB. If a point-to-point link is established, this optional value should not be inserted
+-- This value is expressed in 0.01 dBm
+AuxilliaryLinkRSSI ::= INTEGER {unavailable(-8000000)} (-8000000..10000)
+-- IP address (if available) of the other device (if it runs an IP-based stack)
+IPAddr ::= OCTET STRING
+
+--	The root data frame for cooperative awareness messages
+
+CAMEnhanced ::= SEQUENCE {
+	header ItsPduHeader,
+	cam CoopAwarenessEnhanced
+}
+
+CAM ::= SEQUENCE {
+	header ItsPduHeader,
+	cam CoopAwareness
+}
+
+CoopAwarenessEnhanced ::= SEQUENCE {
+    generationDeltaTime GenerationDeltaTime,
+    camParameters CamParametersEnhanced
+}
+
+CoopAwareness ::= SEQUENCE {
+    generationDeltaTime GenerationDeltaTime,
+    camParameters CamParameters
+}
+
+CamParametersEnhanced ::= SEQUENCE {
+    basicContainer BasicContainer,
+    highFrequencyContainer HighFrequencyContainer,
+    lowFrequencyContainer LowFrequencyContainer OPTIONAL,
+    specialVehicleContainer SpecialVehicleContainer OPTIONAL,
+    channelNodeStatusContainer ChannelNodeStatusContainer OPTIONAL,
+	...
+}
+
+CamParameters ::= SEQUENCE {
+    basicContainer BasicContainer,
+    highFrequencyContainer HighFrequencyContainer,
+    lowFrequencyContainer LowFrequencyContainer OPTIONAL,
+    specialVehicleContainer SpecialVehicleContainer OPTIONAL,
+	...
+}
+
+ChannelNodeStatusContainer ::= SEQUENCE {
+	auxilliaryLinkMac AuxilliaryLinkMac OPTIONAL,
+	auxilliaryLinkRSSI AuxilliaryLinkRSSI OPTIONAL,
+	ipAddress IPAddr OPTIONAL,
+	publicIpAddress IPAddr OPTIONAL,
+	cpuLoad CPULoad,
+	ramLoad RAMLoad,
+	gpuLoad GPULoad,
+	extraComputationDeviceCpuLoad CPULoad OPTIONAL,
+	extraComputationDeviceRamLoad RAMLoad OPTIONAL,
+	extraComputationDeciceGpuLoad GPULoad OPTIONAL,
+	...
+}
+
+HighFrequencyContainer ::= CHOICE {
+    basicVehicleContainerHighFrequency BasicVehicleContainerHighFrequency,
+    rsuContainerHighFrequency RSUContainerHighFrequency,
+	...
+}
+
+ LowFrequencyContainer ::= CHOICE {
+  basicVehicleContainerLowFrequency BasicVehicleContainerLowFrequency,
+	...
+}
+
+SpecialVehicleContainer ::= CHOICE {
+    publicTransportContainer PublicTransportContainer,
+    specialTransportContainer SpecialTransportContainer,
+    dangerousGoodsContainer DangerousGoodsContainer,
+    roadWorksContainerBasic RoadWorksContainerBasic,
+    rescueContainer RescueContainer,
+    emergencyContainer EmergencyContainer,
+    safetyCarContainer SafetyCarContainer,
+	...
+}
+
+BasicContainer ::= SEQUENCE {
+	stationType StationType,
+	referencePosition ReferencePosition,
+	...
+}
+
+BasicVehicleContainerHighFrequency ::= SEQUENCE {
+    heading Heading,
+    speed Speed,
+	driveDirection DriveDirection,
+	vehicleLength VehicleLength,
+	vehicleWidth VehicleWidth,
+	longitudinalAcceleration LongitudinalAcceleration,
+    curvature Curvature,
+	curvatureCalculationMode CurvatureCalculationMode,
+    yawRate YawRate,
+	accelerationControl AccelerationControl OPTIONAL,
+	lanePosition LanePosition OPTIONAL,
+    steeringWheelAngle SteeringWheelAngle OPTIONAL,
+	lateralAcceleration LateralAcceleration OPTIONAL,
+	verticalAcceleration VerticalAcceleration OPTIONAL,
+    performanceClass PerformanceClass OPTIONAL,
+	cenDsrcTollingZone CenDsrcTollingZone OPTIONAL
+}
+
+BasicVehicleContainerLowFrequency  ::= SEQUENCE {
+	vehicleRole VehicleRole,
+	exteriorLights ExteriorLights,
+    pathHistory PathHistory
+}
+
+PublicTransportContainer ::= SEQUENCE {
+	embarkationStatus EmbarkationStatus,
+    ptActivation PtActivation OPTIONAL
+}
+
+SpecialTransportContainer ::= SEQUENCE {
+	specialTransportType SpecialTransportType,
+	lightBarSirenInUse LightBarSirenInUse
+}
+
+ DangerousGoodsContainer ::= SEQUENCE {
+  dangerousGoodsBasic DangerousGoodsBasic
+ }
+ 
+ RoadWorksContainerBasic ::= SEQUENCE {
+  roadworksSubCauseCode RoadworksSubCauseCode OPTIONAL,
+  lightBarSirenInUse LightBarSirenInUse,
+  closedLanes ClosedLanes OPTIONAL
+ }
+
+RescueContainer ::= SEQUENCE {
+	lightBarSirenInUse LightBarSirenInUse
+}
+
+EmergencyContainer ::= SEQUENCE {
+	lightBarSirenInUse LightBarSirenInUse,
+	incidentIndication CauseCode OPTIONAL,
+	emergencyPriority EmergencyPriority OPTIONAL
+}
+
+SafetyCarContainer ::= SEQUENCE {
+	lightBarSirenInUse LightBarSirenInUse,
+	incidentIndication CauseCode OPTIONAL,
+	trafficRule TrafficRule OPTIONAL,
+    speedLimit SpeedLimit OPTIONAL
+}
+
+RSUContainerHighFrequency ::= SEQUENCE {
+	protectedCommunicationZonesRSU ProtectedCommunicationZonesRSU OPTIONAL,
+	...
+}
+
+GenerationDeltaTime ::= INTEGER { oneMilliSec(1) } (0..65535)
+
+END
